@@ -21,17 +21,17 @@ export default {
         rules: [{
           id: 3,
           operator: 1,
-          value: 10.25
+          value: 9
         }, {
           condition: 'or',
           rules: [{
             id: 4,
             operator: 2,
-            value: 2
+            value: 'USA'
           }, {
             id: 5,
             operator: 3,
-            value: 1
+            value: '2022-9-5'
           }]
         }]
       }]
