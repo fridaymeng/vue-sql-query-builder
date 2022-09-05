@@ -2,14 +2,23 @@
   <template v-for="(item, index) in rules" :key="index">
     <div class="rules-group-container" v-if="item.condition">
       <div class="rules-group-header">
-        <a-radio-group
-          v-model:value="item['condition']"
-          button-style="solid"
-          @change="() => handleCondition(item['condition'], index)"
-        >
-          <a-radio-button value="and">And</a-radio-button>
-          <a-radio-button value="or">Or</a-radio-button>
-        </a-radio-group>
+        <a-row type="flex">
+          <a-col :span="12">
+            <a-radio-group
+              v-model:value="item['condition']"
+              button-style="solid"
+              @change="() => handleCondition(item['condition'], index)"
+            >
+              <a-radio-button value="and">And</a-radio-button>
+              <a-radio-button value="or">Or</a-radio-button>
+            </a-radio-group>
+          </a-col>
+          <a-col :span="12">
+            <div class="ctl-wrap">
+              <a-button @click="() => handleAddRule(item.id)">Add Rule</a-button>
+            </div>
+          </a-col>
+        </a-row>
       </div>
       <div class="rules-group-body">
         <div class="rules-list">
@@ -49,7 +58,10 @@
               </div>
             </template>
           </template>
-          <rule-list :rules="item.rules">
+          <rule-list
+            :rules="item.rules"
+            @handleAddRule="handleAddRule"
+          >
           </rule-list>
         </div>
       </div>
@@ -90,7 +102,11 @@ export default {
   },
   mounted () {
   },
+  emits: ['handleAddRule'],
   methods: {
+    handleAddRule (val) {
+      this.$emit('handleAddRule', val)
+    },
     handleCondition (val, index) {
       console.log(val, index)
     },
@@ -166,6 +182,9 @@ export default {
   }
   .select  {
     width: 100%;
+  }
+  .ctl-wrap {
+    text-align: right;
   }
 }
 </style>

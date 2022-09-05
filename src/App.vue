@@ -2,11 +2,11 @@
   <div>
     <div class="wrap">
       <!--<div>
-        <a-button @click="handleAdd">Add Rule</a-button>
         <a-button style="margin: 0 0 0 5px;">Add Group</a-button>
       </div>-->
       <rule-list
         :rules="rules"
+        @handleAddRule="handleAddRule"
       ></rule-list>
     </div>
   </div>
@@ -18,12 +18,14 @@ export default {
     return {
       rules: [{
         condition: 'and',
+        id: 0,
         rules: [{
           id: 3,
           operator: 1,
           value: 9
         }, {
           condition: 'or',
+          id: 9,
           rules: [{
             id: 4,
             operator: 2,
@@ -39,7 +41,20 @@ export default {
   },
   mounted () {},
   methods: {
-    handleAdd () {
+    findId (rules, id) {
+      rules.forEach(item => {
+        if (item.id === id) {
+          item.rules.push({
+            id: 3,
+            operator: 1,
+            value: Math.random() * 10000
+          })
+        }
+        if (item.rules) this.findId(item.rules, id)
+      })
+    },
+    handleAddRule (id) {
+      this.findId(this.rules, id)
     }
   },
   components: {
