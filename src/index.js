@@ -7,7 +7,7 @@ import App from './App.vue'
 
 const app = createApp(App);
 
-import { DatePicker, Button, Input, Row, Col, Select, Radio, Tree } from 'ant-design-vue';
+import { DatePicker, Button, Input, Row, Col, Select, Radio } from 'ant-design-vue';
 app.use(DatePicker);
 app.use(Button);
 app.use(Input);
@@ -15,7 +15,6 @@ app.use(Row);
 app.use(Col);
 app.use(Select);
 app.use(Radio);
-app.use(Tree);
 
 class QueryBuilder {
   constructor (params = {}) {
