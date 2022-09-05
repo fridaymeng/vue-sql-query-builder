@@ -112,8 +112,8 @@ export default {
   position: relative;
   padding: 10px;
   padding-bottom: 6px;
-  border: 1px solid #dcc896;
-  background: rgba(250,240,210,.5);
+  border: 1px solid #ddd;
+  background: #f3f4f5;
   margin: 4px 0;
   border-radius: 5px;
   .rules-list {
@@ -134,10 +134,10 @@ export default {
     & > ::before,& > ::after {
       content: '';
       position: absolute;
-      left: -10px;
-      width: 10px;
+      left: -16px;
+      width: 15px;
       height: calc(50% + 4px);
-      border-color: #ccc;
+      border-color: #d9d9d9;
       border-style: solid;
     }
     & > ::after {
@@ -158,6 +158,7 @@ export default {
   }
   .rules-group-header {
     margin-bottom: 10px;
+    overflow: hidden;
   }
   .select  {
     width: 100%;
