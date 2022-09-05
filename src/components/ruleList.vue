@@ -16,6 +16,7 @@
           <a-col :span="12">
             <div class="ctl-wrap">
               <a-button @click="() => handleAddRule(item.id)">Add Rule</a-button>
+              <a-button @click="() => handleAddGroup(item.id)">Add Group</a-button>
             </div>
           </a-col>
         </a-row>
@@ -35,7 +36,7 @@
                 <a-row type="flex" :gutter="16">
                   <a-col :span="8">
                     <a-select
-                      @change="handleChange"
+                      @change="() => handleIdChange(ruleItem.id, ruleItem.key)"
                       v-model:value="ruleItem.id"
                       class="select"
                     >
@@ -52,7 +53,10 @@
                     </a-select>
                   </a-col>
                   <a-col :span="10">
-                    <a-input placeholder="" v-model:value="ruleItem.value" />
+                    <a-date-picker v-if="ruleItem.type === 'DatePicker'" v-model:value="ruleItem.value" />
+                    <a-date-picker v-else-if="ruleItem.type === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
+                    <a-range-picker v-else-if="ruleItem.type === 'RangePicker'" v-model:value="ruleItem.value" />
+                    <a-input placeholder="" v-else v-model:value="ruleItem.value" />
                   </a-col>
                 </a-row>
               </div>
@@ -60,7 +64,10 @@
           </template>
           <rule-list
             :rules="item.rules"
+            :fields="fields"
+            :operators="operators"
             @handleAddRule="handleAddRule"
+            @handleIdChange="handleIdChange"
           >
           </rule-list>
         </div>
@@ -72,46 +79,23 @@
 export default {
   name: 'RuleList',
   data () {
-    return {
-      fields: [
-        { name: "ID", id: 119 },
-        { name: "User", id: 2 },
-        {
-          name: "Age",
-          id: 3,
-          type: "SelectList"
-        },
-        { name: "Nation", id: 4 },
-        { name: "Date Picker", id: 5, type: "DatePicker" },
-        { name: "Month Picker", id: 6, type: "MonthPicker" },
-        { name: "Range Picker", id: 7, type: "RangePicker" }
-      ],
-      operators: [
-        { name: 'equal', id: 1, symbol: '=' },
-        { name: 'not equal', id: 2, symbol: '!=' },
-        { name: 'is not null', id: 3, symbol: 'is not null' },
-        { name: 'is null', id: 4, symbol: 'is null' },
-        { name: 'in', id: 5, symbol: 'in' },
-        { name: 'not in', id: 6, symbol: 'not in' },
-        { name: 'less', id: 7, symbol: 'less' },
-        { name: 'less or equal', id: 8, symbol: 'less or equal' },
-        { name: 'greater', id: 9, symbol: 'greater' },
-        { name: 'greater or equal', id: 10, symbol: 'greater or equal' }
-      ]
-    }
+    return {}
   },
   mounted () {
   },
-  emits: ['handleAddRule'],
+  emits: ['handleAddRule', 'handleIdChange'],
   methods: {
     handleAddRule (val) {
       this.$emit('handleAddRule', val)
     },
+    handleAddGroup (val) {
+      console.log(val)
+    },
     handleCondition (val, index) {
       console.log(val, index)
     },
-    handleChange (val) {
-      console.log(val)
+    handleIdChange (id, key) {
+      this.$emit('handleIdChange', id, key)
     },
     handleOperatorChange (val) {
       console.log(val)
@@ -119,6 +103,18 @@ export default {
   },
   props: {
     rules: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    fields: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    operators: {
       type: Array,
       default: () => {
         return []
@@ -185,6 +181,9 @@ export default {
   }
   .ctl-wrap {
     text-align: right;
+    button {
+      margin: 0 0 0 5px;
+    }
   }
 }
 </style>
