@@ -1,5 +1,5 @@
 <template>
-  <template v-for="(item, index) in rules" :key="index">
+  <template v-for="item in rules" :key="item.key">
     <div class="rules-group-container" v-if="item.condition">
       <div class="rules-group-header">
         <a-row type="flex">
@@ -7,7 +7,7 @@
             <a-radio-group
               v-model:value="item['condition']"
               button-style="solid"
-              @change="() => handleCondition(item['condition'], index)"
+              @change="() => handleCondition(item['condition'])"
             >
               <a-radio-button value="and">And</a-radio-button>
               <a-radio-button value="or">Or</a-radio-button>
@@ -45,17 +45,34 @@
                   </a-col>
                   <a-col :span="6">
                     <a-select
-                      @change="handleOperatorChange"
+                      @change="() => handleOperatorChange(ruleItem.operator, ruleItem.key)"
                       v-model:value="ruleItem.operator"
                       class="select"
                     >
                       <a-select-option v-for="operatorItem in operators" :key="operatorItem.id">{{ operatorItem.symbol }}</a-select-option>
                     </a-select>
                   </a-col>
-                  <a-col :span="10">
-                    <a-date-picker v-if="ruleItem.type === 'DatePicker'" v-model:value="ruleItem.value" />
-                    <a-date-picker v-else-if="ruleItem.type === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
-                    <a-range-picker v-else-if="ruleItem.type === 'RangePicker'" v-model:value="ruleItem.value" />
+                  <a-col :span="10" v-if="valueVisible[ruleItem.operator]">
+                    <a-date-picker v-if="ruleItem.operateType === 'DatePicker'" v-model:value="ruleItem.value" />
+                    <a-date-picker v-else-if="ruleItem.operateType === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
+                    <a-range-picker v-else-if="ruleItem.operateType === 'RangePicker'" v-model:value="ruleItem.value" />
+                    <a-input-group compact v-else-if="ruleItem.operateType === 'Between'">
+                      <a-input
+                        v-model:value="ruleItem.value1"
+                        style="width: 100px; text-align: center"
+                        placeholder="Minimum"
+                      />
+                      <a-input
+                        style="width: 30px; border-left: 0; pointer-events: none; background-color: #fff"
+                        placeholder="~"
+                        disabled
+                      />
+                      <a-input
+                        v-model:value="ruleItem.value2"
+                        style="width: 100px; text-align: center; border-left: 0"
+                        placeholder="Maximum"
+                      />
+                    </a-input-group>
                     <a-input placeholder="" v-else v-model:value="ruleItem.value" />
                   </a-col>
                 </a-row>
@@ -66,8 +83,10 @@
             :rules="item.rules"
             :fields="fields"
             :operators="operators"
+            :valueVisible="valueVisible"
             @handleAddRule="handleAddRule"
             @handleIdChange="handleIdChange"
+            @handleOperatorChange="handleOperatorChange"
           >
           </rule-list>
         </div>
@@ -83,7 +102,7 @@ export default {
   },
   mounted () {
   },
-  emits: ['handleAddRule', 'handleIdChange'],
+  emits: ['handleAddRule', 'handleIdChange', 'handleOperatorChange'],
   methods: {
     handleAddRule (val) {
       this.$emit('handleAddRule', val)
@@ -91,17 +110,23 @@ export default {
     handleAddGroup (val) {
       console.log(val)
     },
-    handleCondition (val, index) {
-      console.log(val, index)
+    handleCondition (val) {
+      console.log(val)
     },
     handleIdChange (id, key) {
       this.$emit('handleIdChange', id, key)
     },
-    handleOperatorChange (val) {
-      console.log(val)
+    handleOperatorChange (id, key) {
+      this.$emit('handleOperatorChange', id, key)
     }
   },
   props: {
+    valueVisible: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     rules: {
       type: Array,
       default: () => {

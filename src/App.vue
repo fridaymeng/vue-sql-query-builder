@@ -8,8 +8,10 @@
         :rules="rules"
         :fields="fields"
         :operators="operators"
+        :valueVisible="valueVisible"
         @handleAddRule="handleAddRule"
         @handleIdChange="handleIdChange"
+        @handleOperatorChange="handleOperatorChange"
       ></rule-list>
     </div>
   </div>
@@ -20,6 +22,7 @@ import uuid from './utils/uuid'
 export default {
   data () {
     return {
+      valueVisible: {},
       rules: [{
         condition: 'and',
         id: 0,
@@ -69,11 +72,16 @@ export default {
         { name: 'less', id: 7, symbol: 'less' },
         { name: 'less or equal', id: 8, symbol: 'less or equal' },
         { name: 'greater', id: 9, symbol: 'greater' },
-        { name: 'greater or equal', id: 10, symbol: 'greater or equal' }
+        { name: 'greater or equal', id: 10, symbol: 'greater or equal' },
+        { name: 'between', id: 11, symbol: 'between' },
+        { name: 'not between', id: 12, symbol: 'not between' }
       ]
     }
   },
   mounted () {
+    this.operators.forEach(item => {
+      this.valueVisible[item.id] = ![3, 4].includes(item.id)  
+    })
   },
   methods: {
     addRulesById (rules, id) {
@@ -96,7 +104,7 @@ export default {
           } else if (['RangePicker'].includes(type)) {
              item.value = ['', '']
           }
-          item.type = type
+          item.operateType = type
         }
         if (item.rules) this.idChange(item.rules, key, type)
       })
@@ -104,6 +112,21 @@ export default {
     handleIdChange (id, key) {
       const { type } = this.fields.find(item => item.id === id)
       this.idChange(this.rules, key, type)
+    },
+    operatorChange (rules, key, operatorId) {
+      rules.forEach(item => {
+        if (item.key === key) {
+          if ([11, 12].includes(operatorId)) {
+             item.operateType = 'Between'
+          }
+        }
+        if (item.rules) this.operatorChange(item.rules, key, operatorId)
+      })
+    },
+    handleOperatorChange (id, key) {
+      const rst = this.operators.find(item => item.id === id)
+      console.log(rst)
+      this.operatorChange(this.rules, key, rst.id)
     },
     handleAddRule (id) {
       this.addRulesById(this.rules, id)
