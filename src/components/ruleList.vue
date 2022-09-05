@@ -5,6 +5,7 @@
         <a-radio-group
           v-model:value="item['condition']"
           button-style="solid"
+          @change="() => handleCondition(item['condition'], index)"
         >
           <a-radio-button value="and">And</a-radio-button>
           <a-radio-button value="or">Or</a-radio-button>
@@ -90,6 +91,9 @@ export default {
   mounted () {
   },
   methods: {
+    handleCondition (val, index) {
+      console.log(val, index)
+    },
     handleChange (val) {
       console.log(val)
     },

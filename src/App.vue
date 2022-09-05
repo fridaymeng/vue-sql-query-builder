@@ -37,8 +37,7 @@ export default {
       }]
     }
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
     handleAdd () {
     }
