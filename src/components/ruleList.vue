@@ -34,7 +34,7 @@
                 v-if="!ruleItem.condition"
               >
                 <a-row type="flex" :gutter="16">
-                  <a-col :span="8">
+                  <a-col :span="3">
                     <a-select
                       @change="() => handleIdChange(ruleItem.id, ruleItem.key)"
                       v-model:value="ruleItem.id"
@@ -43,7 +43,7 @@
                       <a-select-option v-for="idItem in fields" :key="idItem.id">{{ idItem.name }}</a-select-option>
                     </a-select>
                   </a-col>
-                  <a-col :span="6">
+                  <a-col :span="2">
                     <a-select
                       @change="() => handleOperatorChange(ruleItem.operator, ruleItem.key)"
                       v-model:value="ruleItem.operator"
@@ -52,7 +52,7 @@
                       <a-select-option v-for="operatorItem in operators" :key="operatorItem.id">{{ operatorItem.symbol }}</a-select-option>
                     </a-select>
                   </a-col>
-                  <a-col :span="10" v-if="valueVisible[ruleItem.operator]">
+                  <a-col :span="6" v-if="valueVisible[ruleItem.operator]">
                     <a-date-picker v-if="ruleItem.operateType === 'DatePicker'" v-model:value="ruleItem.value" />
                     <a-date-picker v-else-if="ruleItem.operateType === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
                     <a-range-picker v-else-if="ruleItem.operateType === 'RangePicker'" v-model:value="ruleItem.value" />

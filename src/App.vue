@@ -38,7 +38,7 @@ export default {
           id: 9,
           key: uuid(),
           rules: [{
-            id: 2,
+            id: 4,
             key: uuid(),
             operator: 2,
             value: 'USA'
@@ -89,9 +89,9 @@ export default {
       rules.forEach(item => {
         if (item.id === id) {
           item.rules.push({
-            id: 3,
+            id: 119,
             operator: 1,
-            value: Math.random() * 10000
+            value: uuid()
           })
         }
         if (item.rules) this.addRulesById(item.rules, id)
@@ -100,13 +100,12 @@ export default {
     addGroupById (rules, id) {
       rules.forEach(item => {
         if (item.id === id) {
-          console.log(item)
           item.rules.push({
             condition: 'or',
             id: Number.parseInt(Math.random() * 100000),
             key: uuid(),
             rules: [{
-              id: 2,
+              id: 4,
               key: uuid(),
               operator: 2,
               value: 'USA'
