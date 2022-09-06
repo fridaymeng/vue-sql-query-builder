@@ -12,6 +12,7 @@
         @handleAddRule="handleAddRule"
         @handleIdChange="handleIdChange"
         @handleOperatorChange="handleOperatorChange"
+        @handleAddGroup="handleAddGroup"
       ></rule-list>
     </div>
   </div>
@@ -95,6 +96,28 @@ export default {
         }
         if (item.rules) this.addRulesById(item.rules, id)
       })
+    },
+    addGroupById (rules, id) {
+      rules.forEach(item => {
+        if (item.id === id) {
+          console.log(item)
+          item.rules.push({
+            condition: 'or',
+            id: Number.parseInt(Math.random() * 100000),
+            key: uuid(),
+            rules: [{
+              id: 2,
+              key: uuid(),
+              operator: 2,
+              value: 'USA'
+            }]
+          })
+        }
+        if (item.rules) this.addGroupById(item.rules, id)
+      })
+    },
+    handleAddGroup (id) {
+      this.addGroupById(this.rules, id)
     },
     idChange (rules, key, type) {
       rules.forEach(item => {

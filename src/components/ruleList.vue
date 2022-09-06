@@ -15,8 +15,8 @@
           </a-col>
           <a-col :span="12">
             <div class="ctl-wrap">
-              <a-button @click="() => handleAddRule(item.id)">Add Rule</a-button>
-              <a-button @click="() => handleAddGroup(item.id)">Add Group</a-button>
+              <a-button type="primary" @click="() => handleAddRule(item.id)">Add Rule</a-button>
+              <a-button type="primary" @click="() => handleAddGroup(item.id)">Add Group</a-button>
             </div>
           </a-col>
         </a-row>
@@ -87,6 +87,7 @@
             @handleAddRule="handleAddRule"
             @handleIdChange="handleIdChange"
             @handleOperatorChange="handleOperatorChange"
+            @handleAddGroup="handleAddGroup"
           >
           </rule-list>
         </div>
@@ -102,13 +103,13 @@ export default {
   },
   mounted () {
   },
-  emits: ['handleAddRule', 'handleIdChange', 'handleOperatorChange'],
+  emits: ['handleAddRule', 'handleIdChange', 'handleOperatorChange', 'handleAddGroup'],
   methods: {
     handleAddRule (val) {
       this.$emit('handleAddRule', val)
     },
     handleAddGroup (val) {
-      console.log(val)
+      this.$emit('handleAddGroup', val)
     },
     handleCondition (val) {
       console.log(val)
