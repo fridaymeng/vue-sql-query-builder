@@ -29,7 +29,7 @@ export default {
     return {
       valueVisible: {},
       rules: [{
-        condition: 'and',
+        condition: 'AND',
         id: 0,
         key: uuid(),
         rules: [{
@@ -38,7 +38,7 @@ export default {
           operator: 1,
           value: 9
         }, {
-          condition: 'or',
+          condition: 'OR',
           id: 9,
           key: uuid(),
           rules: [{
@@ -50,19 +50,16 @@ export default {
             id: 119,
             key: uuid(),
             operator: 3,
-            value: '2022-9-5'
+            value: ''
           }]
         }]
       }],
       fields: [
         { name: "ID", id: 119 },
         { name: "User", id: 2 },
-        {
-          name: "Age",
-          id: 3,
-          type: "SelectList"
-        },
+        { name: "Age", id: 3 },
         { name: "Nation", id: 4 },
+        { name: "Category", id: 7, type: "Category", categoryList: [1, 2, 3, 4, 5] },
         { name: "Date Picker", id: 5, type: "DatePicker" },
         { name: "Month Picker", id: 6, type: "MonthPicker" },
         { name: "Range Picker", id: 7, type: "RangePicker" }
@@ -117,7 +114,7 @@ export default {
       rules.forEach(item => {
         if (item.id === id) {
           item.rules.push({
-            condition: 'or',
+            condition: 'OR',
             id: random(),
             key: uuid(),
             rules: [{
@@ -137,10 +134,13 @@ export default {
     idChange (rules, key, type) {
       rules.forEach(item => {
         if (item.key === key) {
-          if (['DatePicker', 'MonthPicker'].includes(type)) {
-             item.value = ''
-          } else if (['RangePicker'].includes(type)) {
-             item.value = ['', '']
+          if (['RangePicker'].includes(type)) {
+            item.value = [undefined, undefined]
+          } else if (['Category'].includes(type)) {
+            item.value = ''
+            item.categoryList = this.fields.find(item => item.type === 'Category')['categoryList']
+          } else {
+            item.value = ''
           }
           item.operateType = type
         }

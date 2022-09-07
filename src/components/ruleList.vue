@@ -9,8 +9,8 @@
               button-style="solid"
               @change="() => handleCondition(item['condition'])"
             >
-              <a-radio-button value="and">And</a-radio-button>
-              <a-radio-button value="or">Or</a-radio-button>
+              <a-radio-button value="AND">And</a-radio-button>
+              <a-radio-button value="OR">Or</a-radio-button>
             </a-radio-group>
           </a-col>
           <a-col :span="12">
@@ -62,6 +62,13 @@
                       <a-date-picker v-if="ruleItem.operateType === 'DatePicker'" v-model:value="ruleItem.value" />
                       <a-date-picker v-else-if="ruleItem.operateType === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
                       <a-range-picker v-else-if="ruleItem.operateType === 'RangePicker'" v-model:value="ruleItem.value" />
+                      <a-select
+                        v-else-if="ruleItem.operateType === 'Category'"
+                        v-model:value="ruleItem.value"
+                        class="select"
+                      >
+                        <a-select-option v-for="(categoryItem, categoryIndex) in ruleItem.categoryList" :key="categoryIndex">{{ categoryItem }}</a-select-option>
+                      </a-select>
                       <a-input-group compact v-else-if="ruleItem.operateType === 'Between'">
                         <a-input
                           v-model:value="ruleItem.value1"
