@@ -17,6 +17,7 @@
             <div class="ctl-wrap">
               <a-button type="primary" @click="() => handleAddRule(item.id)">Add Rule</a-button>
               <a-button type="primary" @click="() => handleAddGroup(item.id)">Add Group</a-button>
+              <a-button v-if="item.id !== 0" type="danger" @click="() => handleDelete(item.key)">Delete</a-button>
             </div>
           </a-col>
         </a-row>
@@ -33,47 +34,58 @@
                 class="rule-container"
                 v-if="!ruleItem.condition"
               >
-                <a-row type="flex" :gutter="16">
-                  <a-col :span="3">
-                    <a-select
-                      @change="() => handleIdChange(ruleItem.id, ruleItem.key)"
-                      v-model:value="ruleItem.id"
-                      class="select"
-                    >
-                      <a-select-option v-for="idItem in fields" :key="idItem.id">{{ idItem.name }}</a-select-option>
-                    </a-select>
+                <a-row type="flex" :gutter="8">
+                  <a-col>
+                    <div class="id-wrap">
+                      <a-select
+                        @change="() => handleIdChange(ruleItem.id, ruleItem.key)"
+                        v-model:value="ruleItem.id"
+                        class="select"
+                      >
+                        <a-select-option v-for="idItem in fields" :key="idItem.id">{{ idItem.name }}</a-select-option>
+                      </a-select>
+                    </div>
                   </a-col>
-                  <a-col :span="2">
-                    <a-select
-                      @change="() => handleOperatorChange(ruleItem.operator, ruleItem.key)"
-                      v-model:value="ruleItem.operator"
-                      class="select"
-                    >
-                      <a-select-option v-for="operatorItem in operators" :key="operatorItem.id">{{ operatorItem.symbol }}</a-select-option>
-                    </a-select>
+                  <a-col>
+                    <div class="operator-wrap">
+                      <a-select
+                        @change="() => handleOperatorChange(ruleItem.operator, ruleItem.key)"
+                        v-model:value="ruleItem.operator"
+                        class="select"
+                      >
+                        <a-select-option v-for="operatorItem in operators" :key="operatorItem.id">{{ operatorItem.symbol }}</a-select-option>
+                      </a-select>
+                    </div>
                   </a-col>
-                  <a-col :span="6" v-if="valueVisible[ruleItem.operator]">
-                    <a-date-picker v-if="ruleItem.operateType === 'DatePicker'" v-model:value="ruleItem.value" />
-                    <a-date-picker v-else-if="ruleItem.operateType === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
-                    <a-range-picker v-else-if="ruleItem.operateType === 'RangePicker'" v-model:value="ruleItem.value" />
-                    <a-input-group compact v-else-if="ruleItem.operateType === 'Between'">
-                      <a-input
-                        v-model:value="ruleItem.value1"
-                        style="width: 100px; text-align: center"
-                        placeholder="Minimum"
-                      />
-                      <a-input
-                        style="width: 30px; border-left: 0; pointer-events: none; background-color: #fff"
-                        placeholder="~"
-                        disabled
-                      />
-                      <a-input
-                        v-model:value="ruleItem.value2"
-                        style="width: 100px; text-align: center; border-left: 0"
-                        placeholder="Maximum"
-                      />
-                    </a-input-group>
-                    <a-input placeholder="" v-else v-model:value="ruleItem.value" />
+                  <a-col v-if="valueVisible[ruleItem.operator]">
+                    <div class="value-wrap">
+                      <a-date-picker v-if="ruleItem.operateType === 'DatePicker'" v-model:value="ruleItem.value" />
+                      <a-date-picker v-else-if="ruleItem.operateType === 'MonthPicker'" picker="month" v-model:value="ruleItem.value" />
+                      <a-range-picker v-else-if="ruleItem.operateType === 'RangePicker'" v-model:value="ruleItem.value" />
+                      <a-input-group compact v-else-if="ruleItem.operateType === 'Between'">
+                        <a-input
+                          v-model:value="ruleItem.value1"
+                          style="width: 100px; text-align: center"
+                          placeholder="Minimum"
+                        />
+                        <a-input
+                          style="width: 30px; border-left: 0; pointer-events: none; background-color: #fff"
+                          placeholder="~"
+                          disabled
+                        />
+                        <a-input
+                          v-model:value="ruleItem.value2"
+                          style="width: 100px; text-align: center; border-left: 0"
+                          placeholder="Maximum"
+                        />
+                      </a-input-group>
+                      <a-input placeholder="" v-else v-model:value="ruleItem.value" />
+                    </div>
+                  </a-col>
+                  <a-col>
+                    <div class="operator-wrap">
+                      <a-button v-if="item.rules.length > 1" type="danger" @click="() => handleDelete(ruleItem.key)">Delete</a-button>
+                    </div>
                   </a-col>
                 </a-row>
               </div>
@@ -88,6 +100,7 @@
             @handleIdChange="handleIdChange"
             @handleOperatorChange="handleOperatorChange"
             @handleAddGroup="handleAddGroup"
+            @handleDelete="handleDelete"
           >
           </rule-list>
         </div>
@@ -103,8 +116,11 @@ export default {
   },
   mounted () {
   },
-  emits: ['handleAddRule', 'handleIdChange', 'handleOperatorChange', 'handleAddGroup'],
+  emits: ['handleAddRule', 'handleIdChange', 'handleOperatorChange', 'handleAddGroup', 'handleDelete'],
   methods: {
+    handleDelete (val) {
+      this.$emit('handleDelete', val)
+    },
     handleAddRule (val) {
       this.$emit('handleAddRule', val)
     },
@@ -197,6 +213,15 @@ export default {
       border: 1px solid #eee;
       background: rgba(255,255,255,.9);
     }
+  }
+  .id-wrap {
+    width: 200px;
+  }
+  .operator-wrap {
+    width: 120px;
+  }
+  .value-wrap {
+    width: 300px;
   }
   .rules-header {
     margin-bottom: 10px;

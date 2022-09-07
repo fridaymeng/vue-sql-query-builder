@@ -10,13 +10,20 @@
         @handleIdChange="handleIdChange"
         @handleOperatorChange="handleOperatorChange"
         @handleAddGroup="handleAddGroup"
+        @handleDelete="handleDelete"
       ></rule-list>
+      <pre>
+        <code>
+          {{ rules }}
+        </code>
+      </pre>
     </div>
   </div>
 </template>
 <script>
 import RuleList from './components/ruleList.vue'
 import uuid from './utils/uuid'
+import random from './utils/random'
 export default {
   data () {
     return {
@@ -82,13 +89,25 @@ export default {
     })
   },
   methods: {
+    deleteRulesById (rules, key) {
+      rules.forEach((item, itemIndex) => {
+        if (item.key === key) {
+          rules.splice(itemIndex, 1)
+        }
+        if (item.rules) this.deleteRulesById(item.rules, key)
+      })
+    },
+    handleDelete (val) {
+      this.deleteRulesById(this.rules, val)
+    },
     addRulesById (rules, id) {
       rules.forEach(item => {
         if (item.id === id) {
           item.rules.push({
             id: 119,
             operator: 1,
-            value: uuid()
+            value: random(),
+            key: uuid()
           })
         }
         if (item.rules) this.addRulesById(item.rules, id)
@@ -99,7 +118,7 @@ export default {
         if (item.id === id) {
           item.rules.push({
             condition: 'or',
-            id: Number.parseInt(Math.random() * 100000),
+            id: random(),
             key: uuid(),
             rules: [{
               id: 4,
