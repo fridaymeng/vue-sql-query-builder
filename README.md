@@ -1,6 +1,6 @@
 # vue-sql-query-builder
 
-![image](assets/img/thumbnail.png))
+![image](assets/img/thumbnail.png)
 
 ## For vue-sql-query-builder.
 
