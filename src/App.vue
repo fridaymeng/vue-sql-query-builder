@@ -1,9 +1,6 @@
 <template>
   <div>
     <div class="wrap">
-      <!--<div>
-        <a-button style="margin: 0 0 0 5px;">Add Group</a-button>
-      </div>-->
       <rule-list
         :rules="rules"
         :fields="fields"

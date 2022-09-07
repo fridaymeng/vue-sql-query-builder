@@ -1,7 +1,7 @@
 <template>
   <template v-for="item in rules" :key="item.key">
-    <div class="rules-group-container" v-if="item.condition">
-      <div class="rules-group-header">
+    <div class="rules-wrap" v-if="item.condition">
+      <div class="rules-header">
         <a-row type="flex">
           <a-col :span="12">
             <a-radio-group
@@ -21,7 +21,7 @@
           </a-col>
         </a-row>
       </div>
-      <div class="rules-group-body">
+      <div class="rules-body">
         <div class="rules-list">
           <template v-if="item.rules">
             <template
@@ -150,7 +150,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.rules-group-container {
+.rules-wrap {
   position: relative;
   padding: 10px;
   padding-bottom: 6px;
@@ -198,7 +198,7 @@ export default {
       background: rgba(255,255,255,.9);
     }
   }
-  .rules-group-header {
+  .rules-header {
     margin-bottom: 10px;
     overflow: hidden;
   }
