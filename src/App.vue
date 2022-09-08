@@ -12,11 +12,11 @@
         @handleAddGroup="handleAddGroup"
         @handleDelete="handleDelete"
       ></rule-list>
-      <pre>
+      <!--<pre>
         <code>
           {{ rules }}
         </code>
-      </pre>
+      </pre>-->
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ import random from './utils/random'
 export default {
   data () {
     return {
+      count: 0,
       valueVisible: {},
       rules: [{
         condition: 'AND',
@@ -37,21 +38,6 @@ export default {
           key: uuid(),
           operator: 1,
           value: 9
-        }, {
-          condition: 'OR',
-          id: 9,
-          key: uuid(),
-          rules: [{
-            id: 4,
-            key: uuid(),
-            operator: 2,
-            value: 'USA'
-          }, {
-            id: 119,
-            key: uuid(),
-            operator: 3,
-            value: ''
-          }]
         }]
       }],
       fields: [
@@ -82,12 +68,42 @@ export default {
     }
   },
   mounted () {
-    console.log(this.params)
+    this.init()
     this.operators.forEach(item => {
       this.valueVisible[item.id] = ![3, 4].includes(item.id)  
     })
   },
+  watch: {
+    rules: {
+      handler (newV, oldV) {
+        if (this.params.handleChange && this.count > 0) {
+          this.params.handleChange(JSON.parse(JSON.stringify(this.rules)))
+        }
+        this.count++
+      },
+      deep: true
+    }
+  },
   methods: {
+    init () {
+      const { operators, fields, rules } = this.params
+      if (operators) {
+        this.operators = this.params.operators
+      }
+      if (fields) {
+        this.fields = fields
+      }
+      if (rules) {
+        this.rules = rules
+        this.generateKey(this.rules)
+      }
+    },
+    generateKey (rules) {
+      rules.forEach(item => {
+        item.key = uuid()
+        if (item.rules) this.generateKey(item.rules)
+      })
+    },
     deleteRulesById (rules, key) {
       rules.forEach((item, itemIndex) => {
         if (item.key === key) {
@@ -103,9 +119,9 @@ export default {
       rules.forEach(item => {
         if (item.id === id) {
           item.rules.push({
-            id: 119,
-            operator: 1,
-            value: random(),
+            id: this.fields[0].id,
+            operator: this.operators[0].id,
+            value: '',
             key: uuid()
           })
         }
@@ -120,10 +136,10 @@ export default {
             id: random(),
             key: uuid(),
             rules: [{
-              id: 4,
+              id: this.fields[0].id,
               key: uuid(),
-              operator: 2,
-              value: 'USA'
+              operator: this.operators[0].id,
+              value: ''
             }]
           })
         }
@@ -165,7 +181,6 @@ export default {
     },
     handleOperatorChange (id, key) {
       const rst = this.operators.find(item => item.id === id)
-      console.log(rst)
       this.operatorChange(this.rules, key, rst.id)
     },
     handleAddRule (id) {
