@@ -86,6 +86,7 @@
                           placeholder="Maximum"
                         />
                       </a-input-group>
+                      <a-rate v-else-if="ruleItem.operateType === 'Rate'" v-model:value="ruleItem.value" allow-half />
                       <a-input placeholder="" v-else v-model:value="ruleItem.value" />
                     </div>
                   </a-col>

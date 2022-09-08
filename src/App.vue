@@ -59,7 +59,8 @@ export default {
         { name: "User", id: 2 },
         { name: "Age", id: 3 },
         { name: "Nation", id: 4 },
-        { name: "Category", id: 7, type: "Category", categoryList: [1, 2, 3, 4, 5] },
+        { name: "Category", id: 8, type: "Category", categoryList: [1, 2, 3, 4, 5] },
+        { name: "Rate", id: 9, type: "Rate" },
         { name: "Date Picker", id: 5, type: "DatePicker" },
         { name: "Month Picker", id: 6, type: "MonthPicker" },
         { name: "Range Picker", id: 7, type: "RangePicker" }
@@ -81,6 +82,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.params)
     this.operators.forEach(item => {
       this.valueVisible[item.id] = ![3, 4].includes(item.id)  
     })
@@ -168,6 +170,14 @@ export default {
     },
     handleAddRule (id) {
       this.addRulesById(this.rules, id)
+    }
+  },
+  props: {
+    params: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   components: {
