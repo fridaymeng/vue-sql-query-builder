@@ -77,7 +77,9 @@ export default {
     rules: {
       handler (newV, oldV) {
         if (this.params.handleChange && this.count > 0) {
-          this.params.handleChange(JSON.parse(JSON.stringify(this.rules)))
+          const rules = JSON.parse(JSON.stringify(this.rules));
+          this.deleteKeys(rules)
+          this.params.handleChange(rules)
         }
         this.count++
       },
@@ -85,6 +87,12 @@ export default {
     }
   },
   methods: {
+    deleteKeys (rules) {
+      rules.forEach(item => {
+        delete item.key;
+        if (item.rules) this.deleteKeys(item.rules)
+      })
+    },
     init () {
       const { operators, fields, rules } = this.params
       if (operators) {
