@@ -54,8 +54,8 @@ export default {
       operators: [
         { name: 'equal', id: 1, symbol: '=' },
         { name: 'not equal', id: 2, symbol: '!=' },
-        { name: 'is not null', id: 3, symbol: 'is not null' },
-        { name: 'is null', id: 4, symbol: 'is null' },
+        { name: 'is not null', id: 3, value: 'disabled', symbol: 'is not null' },
+        { name: 'is null', id: 4, value: 'disabled', symbol: 'is null' },
         { name: 'in', id: 5, symbol: 'in' },
         { name: 'not in', id: 6, symbol: 'not in' },
         { name: 'less', id: 7, symbol: 'less' },
@@ -69,8 +69,9 @@ export default {
   },
   mounted () {
     this.init()
+    const arr = this.props.operators.filter(item => item.value === 'disabled').map(item => item.id)
     this.operators.forEach(item => {
-      this.valueVisible[item.id] = ![3, 4].includes(item.id)  
+      this.valueVisible[item.id] = !arr.includes(item.id)  
     })
   },
   watch: {
