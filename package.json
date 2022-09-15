@@ -1,6 +1,6 @@
 {
   "name": "vue-sql-query-builder",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "For vue SQL query builder.",
   "main": "lib/index.js",
   "module": "lib/index.js",

@@ -67,7 +67,7 @@
                         v-model:value="ruleItem.value"
                         class="select"
                       >
-                        <a-select-option v-for="(categoryItem, categoryIndex) in ruleItem.categoryList" :key="categoryIndex">{{ categoryItem }}</a-select-option>
+                        <a-select-option v-for="categoryItem in ruleItem.categoryList" :key="categoryItem.id">{{ categoryItem.name }}</a-select-option>
                       </a-select>
                       <a-input-group compact v-else-if="ruleItem.operateType === 'Between'">
                         <a-input
