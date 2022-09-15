@@ -69,7 +69,7 @@ export default {
   },
   mounted () {
     this.init()
-    const arr = this.props.operators.filter(item => item.value === 'disabled').map(item => item.id)
+    const arr = this.operators.filter(item => item.value === 'disabled').map(item => item.id)
     this.operators.forEach(item => {
       this.valueVisible[item.id] = !arr.includes(item.id)  
     })
