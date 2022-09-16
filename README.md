@@ -21,7 +21,7 @@ yarn start
 
 ### Init
 ```js
-import * as queryBuilder from "vue-sql-query-builder";
+import QueryBuilder from "vue-sql-query-builder";
 const queryBuilder = new QueryBuilder();
 const rules = [{
   condition: 'AND',

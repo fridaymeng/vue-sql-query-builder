@@ -10,8 +10,9 @@ module.exports = {
     path: path.resolve(__dirname, 'lib'),
     filename: 'index.js',
     library: {
-      // name: "nodeLayout",
-      type: "umd"
+      name: "QueryBuilder",
+      type: "umd",
+      export: "default"
     }
   },
   performance: { hints: false },

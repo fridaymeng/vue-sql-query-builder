@@ -24,6 +24,4 @@ class QueryBuilder {
   }
   reset () {}
 }
-export {
-  QueryBuilder
-}
+export default QueryBuilder;
